@@ -52,6 +52,14 @@ namespace QueryBuilder {
 
             /**
              * @brief: check queryBuilder/IQueryBuilder.h
+             * @param fieldName
+             * @param value
+             * @return
+             */
+            std::error_code setValuedField(const std::string &fieldName, const std::string &value) override;
+
+            /**
+             * @brief: check queryBuilder/IQueryBuilder.h
              * @return
              */
             std::error_code setQueryType(const QueryType &queryType) override;
@@ -80,7 +88,7 @@ namespace QueryBuilder {
         private:
             using IMainClauseCreator = QueryBuilder::MYSQLQueryBuilder::MainClauseCreator::IMainClauseCreator;
             using SELECTClauseCreator = QueryBuilder::MYSQLQueryBuilder::MainClauseCreator::SELECTClauseCreator;
-
+            using UPDATEClauseCreator = QueryBuilder::MYSQLQueryBuilder::MainClauseCreator::UPDATEClauseCreator;
 
             std::string formRegex(const std::string &pattern);
 
@@ -94,10 +102,28 @@ namespace QueryBuilder {
                     case QueryType::SELECT:
                         return std::shared_ptr<IMainClauseCreator>(new SELECTClauseCreator(_tableName, _targetFields));
                         break;
+                    case QueryType::UPDATE:
+                        return std::shared_ptr<IMainClauseCreator>(new UPDATEClauseCreator(_tableName));
+                        break;
                     default:
                         //return an empty ptr
                         return std::shared_ptr<IMainClauseCreator>(nullptr);
                 }
+            }
+
+            inline void appendSetClause() {
+                std::stringstream  setClause;
+
+                setClause << " set";
+
+                //form and append assignment statements from _valuedFields
+                for (const std::pair<std::string, std::string> &valuedField : _valuedFields) {
+                    setClause << ((_valuedFields.begin()->first == valuedField.first) ? (" ") : (", "));
+                    setClause << valuedField.first << " = " << valuedField.second;
+                }
+
+                //append the 'set' clause to the query
+                _query += setClause.str();
             }
 
             /**
@@ -134,7 +160,8 @@ namespace QueryBuilder {
 
             std::string _tableName;     //The formatted name of the targeted-table
             std::vector <std::string> _targetFields;        // The vector of formatted target-fields
-            QueryType _queryType;       //The type of the query
+            std::map<std::string, std::string> _valuedFields;
+            QueryType _queryType{QueryType::NIL};       //The type of the query
             std::vector <std::string> _queryConditions;     // The vector of all formatted conditions of the query
             std::string _order;     //The order of the affected rows of the query
             int _limit{0};      //The limit of the affected rows of the query

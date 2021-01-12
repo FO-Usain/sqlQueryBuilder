@@ -8,6 +8,12 @@
 using MYSQLQueryBuilder = QueryBuilder::MYSQLQueryBuilder::MYSQLQueryBuilder;
 
 std::string MYSQLQueryBuilder::getQuery() {
+
+    //confirm that the type of query is known
+    if (_queryType == QueryBuilder::QueryType::NIL) {       //the query-type was not specifiedt
+        throw QueryBuilder::Error(std::error_code(7, QueryBuilder::errorCategory()));
+    }
+
     try {
         //get the MainClause-creator
         mainClauseCreator = createMainClauseCreator(_queryType);
@@ -23,6 +29,11 @@ std::string MYSQLQueryBuilder::getQuery() {
 
     //add the main clause of the query to _query
     _query = mainClauseCreator->createMainClause();
+
+    if (!_valuedFields.empty() && (_queryType == QueryBuilder::QueryType::UPDATE)) {       //there are valuedFields
+            //append the 'set' clause to the query being built
+            appendSetClause();
+    }
 
     if (!_queryConditions.empty()) {        //there are conditions for the query
         //append the where-clause to the query
@@ -91,12 +102,39 @@ std::error_code MYSQLQueryBuilder::addTargetFields(const std::vector <std::strin
     return std::error_code(0, QueryBuilder::errorCategory());
 }
 
+std::error_code MYSQLQueryBuilder::setValuedField(const std::string &fieldName, const std::string &value) {
+
+    //confirm that all field is safe to use(For protection against SQL injection attack)
+
+    //confirm that value is safe to use(For protection against SQL injection attack)
+
+    std::string _fieldName = fieldName;
+    std::string _value = value;
+
+    //escape _fieldName;
+
+    //escape _value
+
+    std::string formattedName = "`";
+    formattedName += _fieldName + "`";
+
+    //store the new(formatted version) fieldName-value pair in _valuedFields
+    _valuedFields[formattedName] = "'";
+    _valuedFields[formattedName] += _value + "'";
+
+    //return with a success std::error_code
+    return std::error_code(0, QueryBuilder::errorCategory());
+}
+
 std::error_code MYSQLQueryBuilder::setQueryType(const QueryBuilder::QueryType &queryType) {
 
     //initialize _queryType with the corresponding string-value of queryType
     switch (queryType) {
         case QueryBuilder::QueryType::SELECT:
             _queryType = QueryBuilder::QueryType::SELECT;
+            break;
+        case QueryBuilder::QueryType::UPDATE:
+            _queryType = QueryBuilder::QueryType::UPDATE;
             break;
         case QueryBuilder::QueryType::DELETE:
             _queryType = QueryBuilder::QueryType::DELETE;

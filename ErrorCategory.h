@@ -57,7 +57,10 @@ namespace QueryBuilder {
                     message = "Cannot create query-main-clause";
                     break;
                 case 6:
-                    message = "No table specified";
+                    message = "Table-name not specified";
+                    break;
+                case 7:
+                    message = "Query-type not specified";
                     break;
                 default:
                     message = "Unknown error";
@@ -79,7 +82,7 @@ namespace QueryBuilder {
          * @brief: This function allows a client to map a custom error-code to a message.
          * If the error-code is already mapped to a message, its message is updated to the newly passed message.
          * @param code: The custom error-code
-         * @param message: The custom error-category
+         * @param message: The custom error-message
          */
         static void addError(int code, std::string message) {
             //set the error

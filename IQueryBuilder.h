@@ -14,12 +14,14 @@
 namespace QueryBuilder {
 
     /**
-     * @brief: The enumeration of all the queries that are presently recognizable by  IQuery-builders.
+     * @brief: The enumeration of all the queries that are presently recognizable by  ideal IQueryBuilders.
      * If the concerned IQueryBuilder does not recognize it, it returns a std::error_code of category QueryBuilder::ErrorCategory, where std::error_code::value() = 1
      */
     enum QueryType {
+        NIL,
         INSERT,
         SELECT,
+        UPDATE,
         DELETE,
     };
 
@@ -82,6 +84,15 @@ namespace QueryBuilder {
          * @return: std::error_code: reports the status of the operation.
          */
         virtual std::error_code addTargetFields(const std::vector <std::string> &fields) = 0;
+
+
+        /**
+         * @brief:
+         * @param fieldName
+         * @param value
+         * @return
+         */
+        virtual std::error_code setValuedField(const std::string &fieldName, const std::string &value) = 0;
 
         /**
          * @brief: sets the kind of operation the query will query the database for. It should support all query types such as SELECT, INSERT, DELETE, e.t.c.
