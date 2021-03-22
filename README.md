@@ -1,7 +1,5 @@
-//
-// Created by fo on 22/03/2021.
-//
-// This file contains a use-case of MYSQLBuilder
+This file contains a typical example
+
 #include "../../types/CompQueryCondition.h"
 #include "../../builders/MYSQLBuilder.h"
 
@@ -14,8 +12,8 @@ using QCondition = DBQueryBuilder::Type::QueryCondition;
 using CQCondition = DBQueryBuilder::Type::CompQueryCondition;
 
 int main() {
-    //initialize a new MYSQLBuilder
-    IQueryBuilder::Ptr builder(new MYSQLBuilder());
+//initialize a new MYSQLBuilder
+IQueryBuilder::Ptr builder(new MYSQLBuilder());
 
     //start to build the query
     builder->setTableName("CipherPackage");
@@ -37,3 +35,6 @@ int main() {
 
     return 0;
 }
+
+compilation for g++, assuming main.cpp is your source-file:
+g++ main.coo src/builders/MYSQLBuilder.cpp src/types/CompQueryCondition.cpp src/types/QueryCondition.cpp -std=c++17 -o main
