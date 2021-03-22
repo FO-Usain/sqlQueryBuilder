@@ -1,0 +1,3 @@
+/home/fo/CLionProjects/dbQueryBuilder/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/fo/CLionProjects/dbQueryBuilder/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/fo/CLionProjects/dbQueryBuilder/cmake-build-debug/CMakeFiles/dbQueryBuilder.dir
