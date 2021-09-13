@@ -1,4 +1,4 @@
-This file contains a typical example
+This file contains a trivial example
 
 #include "../../types/CompQueryCondition.h"
 #include "../../builders/MYSQLBuilder.h"
