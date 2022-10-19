@@ -1,4 +1,4 @@
-This file contains a trivial example
+# This file contains a trivial example
 
 #include "../../types/CompQueryCondition.h"
 #include "../../builders/MYSQLBuilder.h"
@@ -36,10 +36,7 @@ IQueryBuilder::Ptr builder(new MYSQLBuilder());
     return 0;
 }
 
-<<<<<<< HEAD
-output: select  `clientId`, `cipherName`, `key`, `id` from `CipherPackage` where  `clientId`='0' order by `clientId` asc 
+### output: select  `clientId`, `cipherName`, `key`, `id` from `CipherPackage` where  `clientId`='0' order by `clientId` asc 
 
-=======
->>>>>>> 6f9772ddd74eeabb608a0c150cfcb9eae065faef
-compilation for g++, assuming main.cpp is your source-file:
+### compilation for g++, assuming main.cpp is your source-file:
 g++ main.coo src/builders/MYSQLBuilder.cpp src/types/CompQueryCondition.cpp src/types/QueryCondition.cpp -std=c++17 -o main
